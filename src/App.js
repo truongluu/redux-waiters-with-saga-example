@@ -14,6 +14,10 @@ function App() {
   const waiter = useSelector(state => state.waiter)
   console.log('waiter', waiter)
   const isIncr = isIncrSelector(waiter)
+  const handleClick = async () => {
+    const increResponse = await dispatch(increAction.start(1));
+    console.log('increResponse', increResponse);
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -29,7 +33,7 @@ function App() {
         >
           Learn React
         </a>
-        <button onClick={() => dispatch(increAction.start(1))}>Incr</button>
+        <button onClick={() => handleClick()}>Incr</button>
         Counter: {counter}
         {
           isIncr && <p>Loading...</p>
