@@ -1,8 +1,6 @@
-import invariant from 'invariant';
-import { call, all, takeEvery, delay, put } from 'redux-saga/effects'
+import { all, takeEvery, delay, put, takeLatest } from 'redux-saga/effects'
 
 import { increAction } from './reducers/counter'
-import co from 'co'
 
 function* incrCounter(action) {
   try {
@@ -11,7 +9,6 @@ function* incrCounter(action) {
     yield delay(4000)
     console.log('call increcounter continue')
     yield put(increAction.success(1));
-    return 'hello abcdef'
     console.log('call incr success')
   } catch (err) {
     console.log('err', err)
@@ -20,6 +17,7 @@ function* incrCounter(action) {
 }
 
 function wrapWithGenerator(handler) {
+
   return function* wr(action) {
     if (!!action.continue) {
       yield* handler(action)
@@ -35,7 +33,8 @@ function wrapWithGenerator(handler) {
 }
 
 function* watchIncrCounter() {
-  yield takeEvery(increAction.start, wrapWithGenerator(incrCounter))
+  debugger;
+  yield takeLatest(increAction.start, wrapWithGenerator(incrCounter))
 }
 
 function* watchLog() {

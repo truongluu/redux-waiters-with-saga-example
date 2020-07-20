@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
+import thunk from 'redux-thunk'
 import waiter from './middlewares/waiter'
 
 import reducers from './reducers'
@@ -13,7 +14,7 @@ import * as serviceWorker from './serviceWorker';
 
 const sagaMiddleWare = createSagaMiddleware()
 
-const store = createStore(reducers, applyMiddleware(waiter, sagaMiddleWare));
+const store = createStore(reducers, applyMiddleware(waiter, sagaMiddleWare, thunk));
 
 sagaMiddleWare.run(rootSaga)
 

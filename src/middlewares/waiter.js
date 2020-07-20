@@ -4,14 +4,14 @@ const createWaiterMiddleWare = (extraArgument) => {
   return ({ dispatch, getState }) => (next) => (action) => {
     if (typeof action === 'object' && typeof action.callback === 'function') {
       console.log('start action with type', action.type.toString())
+      // debugger;
       // check redux saga
-      if (action.callback.prototype.toString() === '[object Generator]' && !action.continue) {
+      if (action.callback.prototype
+        && action.callback.prototype.toString() === '[object Generator]'
+        && !action.continue) {
         return dispatch({ ...action.action, continue: true })
       }
-
-      if (action.callback.prototype.toString() !== '[object Generator]') {
-        return action.callback(dispatch, getState, extraArgument);
-      }
+      return action.callback(dispatch, getState, extraArgument);
 
     }
     if (
