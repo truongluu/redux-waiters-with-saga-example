@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import thunk from 'redux-thunk'
-import waiter from './middlewares/waiter'
+import waiter from 'redux-waiters'
 
 import reducers from './reducers'
 import rootSaga from './sagas'

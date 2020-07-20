@@ -16,25 +16,9 @@ function* incrCounter(action) {
   }
 }
 
-function wrapWithGenerator(handler) {
-
-  return function* wr(action) {
-    if (!!action.continue) {
-      yield* handler(action)
-    } else {
-      yield put({
-        type: increAction.start,
-        callback: handler,
-        action
-      })
-    }
-
-  }
-}
 
 function* watchIncrCounter() {
-  debugger;
-  yield takeLatest(increAction.start, wrapWithGenerator(incrCounter))
+  yield takeLatest(increAction.start, increAction.waiterActionForSaga(incrCounter))
 }
 
 function* watchLog() {
