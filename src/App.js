@@ -3,17 +3,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import { isWaiting } from 'redux-waiters'
 import logo from './logo.svg';
 import './App.css';
-import { increAction, subtractActionCreator, multiplyActionCreator } from './reducers/counter'
+import { increAction, subtractActionCreator, subtractAction, multiplyActionCreator, multiplyAction } from './reducers/counter'
 
 
 const isIncrSelector = isWaiting(increAction.id)
+const isMultiplySelector = isWaiting(multiplyAction.id)
+const isSubtractSelector = isWaiting(subtractAction.id)
 
 function App() {
   const dispatch = useDispatch();
   const counter = useSelector(state => state.counter)
   const waiter = useSelector(state => state.waiter)
   const isIncr = isIncrSelector(waiter)
-  console.log('isIncr', isIncr)
+  const isMultiply = isMultiplySelector(waiter)
+  const isSubtracting = isSubtractSelector(waiter)
   const handleClick = async () => {
     await dispatch(increAction.start(1));
   }
@@ -38,6 +41,12 @@ function App() {
         Counter: {counter}
         {
           isIncr && <p>Loading...</p>
+        }
+        {
+          isMultiply && <p>Mutiplying...</p>
+        }
+        {
+          isSubtracting && <p>Substracting...</p>
         }
       </header>
     </div>
