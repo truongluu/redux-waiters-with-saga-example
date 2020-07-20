@@ -6,13 +6,14 @@ import './App.css';
 import { increAction, subtractActionCreator, multiplyActionCreator } from './reducers/counter'
 
 
-const isIncrSelector = isWaiting(increAction.start)
+const isIncrSelector = isWaiting(increAction.id)
 
 function App() {
   const dispatch = useDispatch();
   const counter = useSelector(state => state.counter)
   const waiter = useSelector(state => state.waiter)
   const isIncr = isIncrSelector(waiter)
+  console.log('isIncr', isIncr)
   const handleClick = async () => {
     await dispatch(increAction.start(1));
   }
