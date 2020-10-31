@@ -4,11 +4,14 @@ import { isWaiting } from 'redux-waiters'
 import logo from './logo.svg';
 import './App.css';
 import { increAction, subtractActionCreator, subtractAction, multiplyActionCreator, multiplyAction } from './reducers/counter'
+import { loginAction } from './reducers/login'
+import { startActionWithPromise } from './utils/saga-promise-helpers'
 
 
 const isIncrSelector = isWaiting(increAction.id)
 const isMultiplySelector = isWaiting(multiplyAction.id)
 const isSubtractSelector = isWaiting(subtractAction.id)
+const isLoginSelector = isWaiting(loginAction.id)
 
 function App() {
   const dispatch = useDispatch();
@@ -17,6 +20,16 @@ function App() {
   const isIncr = isIncrSelector(waiter)
   const isMultiply = isMultiplySelector(waiter)
   const isSubtracting = isSubtractSelector(waiter)
+  const isLogining = isLoginSelector(waiter)
+  const handleLogin = async () => {
+    try {
+      const loginResponse = await startActionWithPromise(loginAction, { username: 'truong', password: '1234' }, dispatch);
+      console.log('login ok with response', loginResponse);
+    } catch (error) {
+      console.log('error occurred when logged in', error)
+    }
+  }
+
   const handleClick = async () => {
     await dispatch(increAction.start(1));
   }
@@ -38,6 +51,7 @@ function App() {
         <button onClick={() => dispatch(multiplyActionCreator(2))}>Multiply with 2</button>
         <button onClick={() => dispatch(subtractActionCreator())}>Desc</button>
         <button onClick={() => handleClick()}>Incr</button>
+        <button onClick={() => handleLogin()}>Login</button>
         Counter: {counter}
         {
           isIncr && <p>Loading...</p>
@@ -47,6 +61,9 @@ function App() {
         }
         {
           isSubtracting && <p>Substracting...</p>
+        }
+        {
+          isLogining && <p>Logining...</p>
         }
       </header>
     </div>

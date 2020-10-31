@@ -1,6 +1,9 @@
 import { all, takeEvery, delay, put, takeLatest } from 'redux-saga/effects'
 
 import { increAction } from './reducers/counter'
+import { loginAction } from './reducers/login'
+
+import { sagaPromise } from './utils/saga-promise-helpers'
 
 function* incrCounter(action) {
   try {
@@ -27,10 +30,29 @@ function* watchLog() {
   })
 }
 
+function* userLogin() {
+  /**
+   * //Simulate login successful
+   * const loginResult = true;
+   * yield delay(4000);
+   * return loginResult;
+   */
+
+
+  // Simulate login failed
+  throw new Error('not ofund');
+
+}
+
+
+function* watchLogin() {
+  yield takeEvery(loginAction.start, loginAction.waiterActionForSaga(sagaPromise(userLogin)));
+}
 
 export default function* rootSaga() {
   yield all([
     watchIncrCounter(),
-    watchLog()
+    watchLog(),
+    watchLogin()
   ])
 }
