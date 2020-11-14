@@ -1,45 +1,28 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux'
-import { isWaiting } from 'redux-waiters'
-import logo from './logo.svg';
-import './App.css';
-import { increAction, subtractActionCreator, subtractAction, multiplyActionCreator, multiplyAction } from './reducers/counter'
-import { loginAction } from './reducers/login'
-import { startActionWithPromise } from './utils/saga-promise-helpers'
+import { useDispatch, useSelector } from 'react-redux'
+import { isWaiting, useWaiter } from 'redux-waiters'
+import { appThemeActionCreator, appUpdateThemeAction } from './reducers/app'
+import logo from './logo.svg'
+import Login from './Login'
+import Counter from './Counter'
+import './App.css'
 
 
-const isIncrSelector = isWaiting(increAction.id)
-const isMultiplySelector = isWaiting(multiplyAction.id)
-const isSubtractSelector = isWaiting(subtractAction.id)
-const isLoginSelector = isWaiting(loginAction.id)
-
+const appThemeSelector = isWaiting(appUpdateThemeAction.id)
 function App() {
   const dispatch = useDispatch();
-  const counter = useSelector(state => state.counter)
-  const waiter = useSelector(state => state.waiter)
-  const isIncr = isIncrSelector(waiter)
-  const isMultiply = isMultiplySelector(waiter)
-  const isSubtracting = isSubtractSelector(waiter)
-  const isLogining = isLoginSelector(waiter)
-  const handleLogin = async () => {
-    try {
-      const loginResponse = await startActionWithPromise(loginAction, { username: 'truong', password: '1234' }, dispatch);
-      console.log('login ok with response', loginResponse);
-    } catch (error) {
-      console.log('error occurred when logged in', error)
-    }
-  }
-
-  const handleClick = async () => {
-    await dispatch(increAction.start(1));
-  }
+  const gl = useSelector(state => state.app.gl)
+  const [appThemeLoading] = useWaiter(appThemeSelector)
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
+          with gl: {gl ? 'true' : 'false'}<br />
+          {appThemeLoading && 'app loading...'}
         </p>
+        <button onClick={() => { dispatch(appThemeActionCreator()) }}>Update theme</button>
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -48,23 +31,9 @@ function App() {
         >
           Learn React
         </a>
-        <button onClick={() => dispatch(multiplyActionCreator(2))}>Multiply with 2</button>
-        <button onClick={() => dispatch(subtractActionCreator())}>Desc</button>
-        <button onClick={() => handleClick()}>Incr</button>
-        <button onClick={() => handleLogin()}>Login</button>
-        Counter: {counter}
-        {
-          isIncr && <p>Loading...</p>
-        }
-        {
-          isMultiply && <p>Mutiplying...</p>
-        }
-        {
-          isSubtracting && <p>Substracting...</p>
-        }
-        {
-          isLogining && <p>Logining...</p>
-        }
+
+        <Login />
+        <Counter />
       </header>
     </div>
   );

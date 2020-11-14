@@ -31,15 +31,15 @@ function* watchLog() {
 }
 
 function* userLogin() {
-  /**
-   * //Simulate login successful
-   * const loginResult = true;
-   * yield delay(4000);
-   * return loginResult;
-   */
+
+  // //Simulate login successful
+  // const loginResult = true;
+  // yield delay(4000);
+  // return loginResult;
 
 
   // Simulate login failed
+  yield delay(4000);
   throw new Error('not ofund');
 
 }
